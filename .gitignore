@@ -163,3 +163,4 @@ cython_debug/
 
 # Custom
 projects.json
+tests/DOCS_VIEW_ROOT/

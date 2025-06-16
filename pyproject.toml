@@ -8,6 +8,7 @@ authors = [
 dependencies = [
     "winshell>=0.6",
     "inquirerpy>=0.3.4",
+    "pywin32>=310",
 ]
 requires-python = ">=3.12"
 readme = "README.md"

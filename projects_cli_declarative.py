@@ -1,11 +1,15 @@
-import os
-import json
 import argparse
+import json
+import os
+import shutil
+from abc import abstractmethod, ABC
 from json import JSONDecodeError
 from pathlib import Path
-from InquirerPy import inquirer
 from subprocess import run
-import shutil
+
+import winshell
+from InquirerPy import inquirer
+from winshell import Shortcut
 
 PROJECTS_ROOT = Path(os.environ['PROJECTS_ROOT'])
 assert PROJECTS_ROOT
@@ -15,6 +19,32 @@ PROJECTS_FILE = PROJECTS_ROOT / 'projects.json'
 
 PathLike = str | bytes | os.PathLike
 ProjectsSpec = dict[str, list[str]]
+
+
+class ViewBackend(ABC):
+    @staticmethod
+    @abstractmethod
+    def mklink(src: Path, dst: Path) -> None:
+        ...
+
+
+class JunctionBackend(ViewBackend):
+    @staticmethod
+    def mklink(src: Path, dst: Path) -> None:
+        run(['cmd', '/c', 'mklink', '/J', str(dst), str(src)], check=True)
+
+
+class ShortcutBackend(ViewBackend):
+    @staticmethod
+    def mklink(src: Path, dst: Path) -> None:
+        rel_path = f"%PROJECTS_ROOT%\\{src.name}"
+        print(f"Creating shortcut from {rel_path} to {dst}")
+        with winshell.shortcut(str(dst)) as shortcut:
+            shortcut.path = rel_path
+            shortcut.working_directory = "%PROJECTS_ROOT%"
+
+
+implementation = ShortcutBackend()
 
 
 def assert_valid_folder(path: Path):
@@ -47,8 +77,8 @@ def append_projects(name: str, path: str):
     cmd_load()
 
 
-def delete_junction(path: Path):
-    if path.is_junction():
+def delete_project_view(path: Path):
+    if path.is_junction() or path.is_file():
         path.unlink()
     elif path.is_dir():
         try:
@@ -59,10 +89,13 @@ def delete_junction(path: Path):
         raise NotImplementedError('This should not happen!')
 
 
-def mklink_junction(link: Path, target: Path):
-    if not link.exists():
-        link.parent.mkdir(parents=True, exist_ok=True)
-        run(['cmd', '/c', 'mklink', '/J', str(link), str(target)], check=True)
+def mklink(src: Path, dst: Path):
+    assert_valid_folder(src)
+    if isinstance(implementation, ShortcutBackend):
+        dst = dst.with_suffix(".lnk")
+    if not dst.exists():
+        dst.parent.mkdir(parents=True, exist_ok=True)
+        implementation.mklink(src, dst)
 
 
 def cmd_save():
@@ -77,12 +110,12 @@ def cmd_save():
 def iter_folders(path: PathLike):
     """Iterate bottom-up all folders. Won't recurse into project folders"""
     projects = list(load_projects().keys())
-    for directory in os.scandir(path):
-        if directory.is_file():
+    for dir_entry in os.scandir(path):
+        if dir_entry.is_file() and not dir_entry.name.endswith(".lnk"):
             continue
-        if directory.name not in projects and directory.is_dir():
-            yield from iter_folders(directory.path)
-        yield Path(directory.path)
+        if dir_entry.name not in projects and dir_entry.is_dir():
+            yield from iter_folders(dir_entry.path)
+        yield Path(dir_entry.path)
 
 
 def cmd_load():
@@ -93,12 +126,12 @@ def cmd_load():
             target = PROJECTS_ROOT / project
             link = DOCS_VIEW_ROOT / view_dir / project
             paths.append(str(link))
-            mklink_junction(link, target)
+            mklink(target, link)
 
     for existing in iter_folders(DOCS_VIEW_ROOT):
-        if not any(path.startswith(str(existing)) for path in paths):
+        if not any(path.startswith(str(existing.with_suffix(""))) for path in paths):
             print(f"Will delete {existing.relative_to(DOCS_VIEW_ROOT)}")
-            delete_junction(existing)
+            delete_project_view(existing)
 
 
 def cmd_link(project: str = None):
