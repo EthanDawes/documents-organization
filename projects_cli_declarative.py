@@ -9,7 +9,6 @@ from subprocess import run
 
 import winshell
 from InquirerPy import inquirer
-from winshell import Shortcut
 
 PROJECTS_ROOT = Path(os.environ['PROJECTS_ROOT'])
 assert PROJECTS_ROOT
@@ -52,9 +51,9 @@ def assert_valid_folder(path: Path):
     assert path.is_dir()
     error_msg = f"You cannot perform this operation on the %s folder ({path})"
     if path == PROJECTS_ROOT:
-        raise ValueError(error_msg.format("PROJECTS_ROOT"))
+        raise ValueError(error_msg % "PROJECTS_ROOT")
     elif path == DOCS_VIEW_ROOT:
-        raise ValueError(error_msg.format("DOCS_VIEW_ROOT"))
+        raise ValueError(error_msg % "DOCS_VIEW_ROOT")
 
 
 def load_projects() -> ProjectsSpec:
@@ -101,9 +100,9 @@ def mklink(src: Path, dst: Path):
 def cmd_save():
     projects: ProjectsSpec = {}
     for folder in iter_folders(DOCS_VIEW_ROOT):
-        if folder.is_junction():
+        if folder.is_junction() or folder.is_file():
             rel = str(folder.parent.relative_to(DOCS_VIEW_ROOT))
-            projects.setdefault(folder.name, []).append(rel)
+            projects.setdefault(folder.stem, []).append(rel)
     save_projects(projects)
 
 
@@ -160,12 +159,18 @@ def move_and_link(src: Path, dst_view: str):
     append_projects(project, dst_view)
 
 
-def cmd_convert():
+def cmd_convert(project: str):
     convert_path = Path.cwd()
+    if project != "*":
+        convert_path = convert_path / project
     assert_valid_folder(convert_path)
-    for item in convert_path.iterdir():
+    items = convert_path.iterdir() if project == "*" else [convert_path]
+    for item in items:
         if item.is_dir():
-            dst_view = item.relative_to(PROJECTS_ROOT).parent
+            try:
+                dst_view = item.relative_to(PROJECTS_ROOT).parent
+            except ValueError:
+                dst_view = item.relative_to(DOCS_VIEW_ROOT).parent
             move_and_link(item, str(dst_view))
     print(f'Must manually delete "{convert_path.name}"')
 
@@ -176,7 +181,9 @@ def main():
 
     subparsers.add_parser('save')
     subparsers.add_parser('load')
-    subparsers.add_parser('convert')
+
+    convert_parser = subparsers.add_parser('convert')
+    convert_parser.add_argument('project', help="* will treat all dirs in cwd as project. Pass folder name to only convert 1")
 
     link_parser = subparsers.add_parser('link')
     link_parser.add_argument('project', nargs='?', default=None)
@@ -191,7 +198,7 @@ def main():
         case 'load': cmd_load()
         case 'link': cmd_link(args.project)
         case 'link-to': cmd_link_to(args.path)
-        case 'convert': cmd_convert()
+        case 'convert': cmd_convert(args.project)
 
 
 if __name__ == '__main__':
