@@ -1,0 +1,24 @@
+[project]
+name = "documents-organization"
+version = "0.1.0"
+description = "Default template for PDM package"
+authors = [
+    {name = "Ethan Dawes", email = "ethand.python@gmail.com"},
+]
+dependencies = [
+    "winshell>=0.6",
+    "inquirerpy>=0.3.4",
+]
+requires-python = ">=3.12"
+readme = "README.md"
+license = {text = "MIT"}
+
+[project.scripts]
+projects = "project_cli:main"
+
+[tool.pdm]
+distribution = true
+
+[build-system]
+requires = ["pdm-backend"]
+build-backend = "pdm.backend"

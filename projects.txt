@@ -1,0 +1,202 @@
+3D designs/Cali_Cat
+3D designs/clicker trainer
+3D designs/donut
+3D designs/House
+3D designs/Lego Creations
+Coding/Arduino
+Coding/compustats
+Coding/cs251-projects
+Coding/dart
+Coding/Ev3 programs
+Coding/gamemaker 8.1
+Coding/kahoot bot
+Coding/Rust
+Coding/Scratch Projects
+Creative Cloud/Flash
+Creative Cloud/Photoshop
+ECE Labs/board-server
+ECE Labs/ecelabs-vue
+ECE Labs/ecelabs.io
+ECE Labs/k8s-manifests
+ECE Labs/pi-board-controller
+ECE Labs/werift-webrtc
+GitHub/Acronym
+GitHub/AshburyConcessions
+GitHub/availability
+GitHub/Daydream
+GitHub/drone-delivery-website
+GitHub/duplicati
+GitHub/EmailGram
+GitHub/EthanAssistant
+GitHub/EventUniverse
+GitHub/Gift-List
+GitHub/google-sync
+GitHub/google-sync-old
+GitHub/IMSAsingularity
+GitHub/MathMan
+GitHub/MeetAsOne
+GitHub/Mod-Updater
+GitHub/MolView
+GitHub/my_kayle
+GitHub/NameOrca
+GitHub/news
+GitHub/oldscratchblocks
+GitHub/PitchRead
+GitHub/Pleiades
+GitHub/pomodor
+GitHub/portfolio
+GitHub/pouchdb
+GitHub/quizlet-learn-clone
+GitHub/schej.it
+GitHub/Scratch4
+GitHub/ShovelMan
+GitHub/time-maaaaanage
+GitHub/TimeManTODO
+GitHub/VectorForms
+GitHub/ViewImage
+GitHub/VirtualBG
+GitHub/_oof
+glitch.com/ai-card-generator
+glitch.com/conflict-ml
+glitch.com/human-appreciation-day
+glitch.com/imsa-everything
+glitch.com/mental-health
+glitch.com/offline-music
+glitch.com/scouting-api
+glitch.com/time-manage
+glitch.com/timeman backup
+glitch.com/visit-log
+Godot/demo
+Java/adv-prog
+Java/learn
+Modding/.metadata
+Modding/block-update-disabler
+Modding/customheads
+Modding/instruments
+Modding/MC cdm app
+Modding/spawn-plugin
+Modding/tutorial
+Modding/waystodie-plugin
+Modding/youtubers
+MS Office/EAGLE PROJECT
+MS Office/Excel
+MS Office/OneNote
+MS Office/PowerPoint
+MS Office/resume
+MS Office/Word
+Other/Fonts
+Other/Inspiron Downloads
+Other/Minecraft
+Other/Productivity
+Other/Reinstall
+PDFs/NSLI-Y
+PDFs/patrol binder
+PDFs/School
+PDFs/Scouts
+pouchdb/.git
+pouchdb/.vscode
+pouchdb/dist
+pouchdb/node_modules
+pouchdb/public
+pouchdb/src
+python/.git
+python/.idea
+python/ActivityDB
+python/autoclick
+python/Codeforces
+python/codeTrack
+python/countdown-tray
+python/DealNo-Solver
+python/Deep Learning
+python/DiffieHellmanMITM
+python/discord bot
+python/GyroPointer
+python/ical-paylog
+python/ical-paylog-abandoned
+python/idk
+python/IMSA
+python/javascript
+python/JeremyLights
+python/learn
+python/lexington
+python/lib
+python/Minecraft
+python/mod_update
+python/nlp_calculator
+python/not malware
+python/opencv
+python/RedditBot
+python/replaymod_animate
+python/scan
+python/scratch
+python/secret
+python/stickman
+python/timelog-ical
+python/Time_Management
+python/tutoring
+python/U Chicago
+python/USACO
+python/YourVA
+python/yt_takeout
+python/__pycache__
+robotics/FRC-JAVA-2022
+robotics/getting-started
+robotics/red-alliance-api
+robotics/red-alliance-mobile
+robotics/Titan-Algorithms
+robotics/tra-scripts
+robotics/Training2022
+robotics/tra_node_modules
+robotics/vexcode-projects
+Unity/3D snake
+Unity/Ant Game Jam
+Unity/CanvasChess
+Unity/Cliche RPG
+Unity/Driving
+Unity/Explore
+Unity/Global-Game-Jam
+Unity/Gotta Go Fast
+Unity/Hawktober Horrors 2024
+Unity/Pathfinding
+Unity/Realtime
+Unity/Rolling ball
+Unity/Room explore
+Unity/VEX
+Unity/Visualizer-decomp
+web-ext/ai-autoclose
+web-ext/clickbaitDetector
+web-ext/draftback-0.0.19
+web-ext/essay-tracker
+web-ext/focused_youtube
+web-ext/FocusReader
+web-ext/Google-Quick-Create-Matrix
+web-ext/google-tasks
+web-ext/IntentionalWeb
+web-ext/newtab
+web-ext/Price-Rounder
+web-ext/SessionSaver
+web-ext/tab-group-opener
+web-ext/TabMan
+web-ext/TabWrangler
+web-ext/yt music tweaks
+Websites/bookmarklets
+Websites/choose-your-adventure
+Websites/collaborative-twinejs
+Websites/convo-splits
+Websites/deal-no-solver
+Websites/GameMaker
+Websites/guessing-game-demo
+Websites/id-maker
+Websites/kidcoderBeginningWebDesign
+Websites/Minesweeper
+Websites/minesweeper-assist
+Websites/MyData.com
+Websites/ParallelRecipe
+Websites/playlist-test
+Websites/scout speedruns
+Zoom/10th_grade_notes
+Zoom/IMSA_careers
+Zoom/zoom_backgrounds
+Zoom/zoom_funny
+Zoom/zoom_meetings
+Zoom/zoom_people

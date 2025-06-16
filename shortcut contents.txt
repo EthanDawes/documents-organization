@@ -1,0 +1,6 @@
+Personal
+P e r s o n a l    \ DOCUME~    D o c u m e n t sPROJE~
+p r o j e c t s
+R H A
+Windows C:\Users\Ethan\ownCloud\Personal\Documents\_projects\RHA
+p r o j e c t s \ R H A     %PROJECTS_ROOT%\RHA                                                                                                                                    ethans-ideapad
