@@ -1,11 +1,11 @@
 import json
 import os
-os.environ["PROJECTS_CONFIG"] = "tests/.documents_cli.yaml"
+os.environ["PROJECTS_CONFIG"] = "tests/.projview_cli.yaml"
 
 from pyfakefs.fake_filesystem import FakeFilesystem
 from pyfakefs.fake_filesystem_unittest import Patcher
 import yaml
-import projects_cli
+import projview_cli
 
 ROOT = "/test_root"
 

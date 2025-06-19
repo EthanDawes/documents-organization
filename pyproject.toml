@@ -1,7 +1,7 @@
 [project]
-name = "documents-organization"
+name = "projview"
 version = "0.1.0"
-description = "Default template for PDM package"
+description = "Store projects folders flat and construct various views"
 authors = [
     {name = "Ethan Dawes", email = "ethand.python@gmail.com"},
 ]

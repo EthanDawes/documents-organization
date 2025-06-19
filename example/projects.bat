@@ -1,2 +1,2 @@
 @echo off
-python "%~dp0\..\projects_cli.py" %*
+python "%~dp0\..\projview_cli.py" %*
