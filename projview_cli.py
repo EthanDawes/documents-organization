@@ -56,8 +56,8 @@ class ShortcutBackend(ViewBackend):
     @staticmethod
     def mklink(src: Path, dst: Path) -> None:
         print(f"Creating shortcut from %{NAME_PROJECTS}%\\{src.name} to {dst}")
-        with winshell.shortcut(str(dst)) as shortcut:
-            shortcut.path = src
+        with winshell.shortcut(str(dst.absolute())) as shortcut:
+            shortcut.path = str(src.absolute())
 
 
 implementation = ShortcutBackend()
