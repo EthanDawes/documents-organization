@@ -15,7 +15,7 @@ from InquirerPy import inquirer
 NAME_PROJECTS = "PROJECTS_ROOT"
 NAME_VIEW = "DOCS_VIEW_ROOT"
 
-PROFILE_INFO_FILE = Path(os.environ["PROJECTS_CONFIG"] or Path.home()) / ".documents_cli.yaml"
+PROFILE_INFO_FILE = Path(os.environ["PROJECTS_CONFIG"] or (Path.home() / ".documents_cli.yaml"))
 try:
     with PROFILE_INFO_FILE.open() as file:
         CONFIG = yaml.safe_load(file)

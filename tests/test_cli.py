@@ -1,11 +1,13 @@
-# Abandoning automated testing for now due to lack of understanding and fear for my files
+import os
+os.environ["PROJECTS_CONFIG"] = "tests/.documents_cli.yaml"
 
 from pyfakefs.fake_filesystem import FakeFilesystem
 from pyfakefs.fake_filesystem_unittest import Patcher
 import yaml
 from pathlib import Path
+import projects_cli
 
-ROOT = "test_root"
+ROOT = "/test_root"
 
 def create_tree(fs: FakeFilesystem, tree, root=ROOT):
     for name, subtree in tree.items():
@@ -34,12 +36,13 @@ def test_file_structure_transformation():
     data = load_case("tests/case1.yaml")
 
     with Patcher() as patcher:
-        import projects_cli
+        # Importing projects_cli here causes recursion error (https://github.com/pytest-dev/pyfakefs/issues/1096)
+        # Suggested workaround can't find 'pywintypes' (related to PEP 582 mode?)
+        # This means I can't test config file creation (oh well)
         fs = patcher.fs
         create_tree(fs, data["start"])
 
-        # projects_cli
+        projects_cli.where()
 
         actual = read_tree(fs)
-        print(actual)
         assert actual == data["end"]
