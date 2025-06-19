@@ -15,20 +15,19 @@ NAME_PROJECTS = "PROJECTS_ROOT"
 NAME_VIEW = "DOCS_VIEW_ROOT"
 
 
-def get_config():
-    PROFILE_INFO_FILE = Path(os.environ["PROJECTS_CONFIG"] or (Path.home() / ".projview_cli.yaml"))
+def get_config(profile_info_file: Path):
     try:
-        with PROFILE_INFO_FILE.open() as file:
+        with profile_info_file.open() as file:
             config = yaml.safe_load(file)
     except FileNotFoundError:
-        with PROFILE_INFO_FILE.open("w") as file:
+        with profile_info_file.open("w") as file:
             config = {
                 "profile": "projects",
                 NAME_PROJECTS: None,
                 NAME_VIEW: None,
             }
             yaml.safe_dump(config, file)
-            raise ValueError(f"Must configure {NAME_PROJECTS} and {NAME_VIEW} in {PROFILE_INFO_FILE}")
+            raise ValueError(f"Must configure {NAME_PROJECTS} and {NAME_VIEW} in {profile_info_file}")
     return config
 
 
@@ -199,9 +198,13 @@ def main():
     link_to_parser = subparsers.add_parser('link-to')
     link_to_parser.add_argument('path')
 
+    profile_parser = subparsers.add_parser('profile')
+    profile_parser.add_argument('name', nargs='?', default=None)
+
     args = parser.parse_args()
 
-    config = get_config()
+    profile_info_file = Path(os.environ["PROJECTS_CONFIG"] or (Path.home() / ".projview_cli.yaml"))
+    config = get_config(profile_info_file)
     controller = ProjviewController(
         Path(config[NAME_PROJECTS]),
         Path(config[NAME_VIEW]),
@@ -214,6 +217,15 @@ def main():
         case 'link': controller.cmd_link(args.project)
         case 'link-to': controller.cmd_link_to(args.path)
         case 'convert': controller.cmd_convert(args.project)
+        case 'profile':
+            if args.name:
+                config["profile"] = args.name
+                profile_info_file.write_text(yaml.safe_dump(config))
+                # TODO: check for unsaved changes
+                # controller.cmd_load()
+            else:
+                print(profile_info_file)
+                print(yaml.safe_dump(config))
 
 
 if __name__ == '__main__':

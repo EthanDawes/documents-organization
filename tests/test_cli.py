@@ -1,45 +1,40 @@
 import json
-import os
-os.environ["PROJECTS_CONFIG"] = "tests/.projview_cli.yaml"
+from pathlib import Path
 
 # Silly me didn't realize I made calls dependent on the real system (mklink), thus pyfakefs won't work
 import yaml
-import projview_cli
+from projview_cli import ProjviewController, NAME_PROJECTS, NAME_VIEW
 
-ROOT = "/test_root"
-
-def create_tree(fs: FakeFilesystem, tree, root=ROOT):
+def create_tree(root: Path, tree: dict):
     for name, subtree in tree.items():
-        path = fs.joinpaths(root, name)
+        path = root / name
         if subtree is None:
-            fs.create_file(path)
+            path.touch()
         else:
-            fs.create_dir(path)
-            create_tree(fs, subtree, path)
+            path.mkdir()
+            create_tree(path, subtree)
 
 # project.json not checked because that is an implementation detail, not important behavior
-def read_tree(fs: FakeFilesystem, root=ROOT):
+def read_tree(root: Path):
     return {
-        name: read_tree(fs, fs.joinpaths(root, name)) if fs.isdir(fs.joinpaths(root, name)) else None
-        for name in fs.listdir(root)
+        p.name: read_tree(p) if p.is_dir() else None
+        for p in sorted(root.iterdir(), key=lambda x: x.name)
     }
 
 def load_case(path):
     with open(path) as f:
         return yaml.safe_load(f)
 
-def test_load():
+def test_load(tmp_path: Path):
     data = load_case("tests/test_load.yaml")
 
-    with Patcher() as patcher:
-        # Importing projects_cli here causes recursion error (https://github.com/pytest-dev/pyfakefs/issues/1096)
-        # Suggested workaround can't find 'pywintypes' (related to PEP 582 mode?)
-        # This means I can't test config file creation (oh well)
-        fs = patcher.fs
-        create_tree(fs, data["start"])
-        fs.create_file(ROOT + "/PROJECTS_ROOT/projects.json", contents=json.dumps(data["projects"]))
+    projects_root = tmp_path / NAME_PROJECTS
+    views_root = tmp_path / NAME_VIEW
 
-        projview_cli.cmd_load()
+    create_tree(tmp_path, data["start"])
+    (projects_root / "projects.json").write_text(json.dumps(data["projects"]))
 
-        actual = read_tree(fs)
-        assert actual == data["end"]
+    ProjviewController(projects_root, views_root).cmd_load()
+
+    actual = read_tree(tmp_path)
+    assert actual == data["end"]
