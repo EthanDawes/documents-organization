@@ -18,6 +18,7 @@ end:
       project1.txt: null
     project2:
       project2.txt: null
+    projects.json: null
   DOCS_VIEW_ROOT:
     demo:
       project1.lnk: null
