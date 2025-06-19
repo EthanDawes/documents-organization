@@ -162,5 +162,5 @@ cython_debug/
 .idea/
 
 # Custom
-projects.json
+example/PROJECTS_ROOT/*.json
 example/DOCS_VIEW_ROOT/

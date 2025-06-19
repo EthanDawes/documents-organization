@@ -15,23 +15,19 @@ from InquirerPy import inquirer
 NAME_PROJECTS = "PROJECTS_ROOT"
 NAME_VIEW = "DOCS_VIEW_ROOT"
 
-CONFIG: dict | str | None = os.environ.get("PROJECTS_CONFIG")
-
-if CONFIG is None:
-    PROFILE_INFO_FILE = Path.home() / ".documents_cli.yaml"
-    try:
-        with PROFILE_INFO_FILE.open() as file:
-            CONFIG = yaml.safe_load(file)
-    except FileNotFoundError:
-        with PROFILE_INFO_FILE.open("w") as file:
-            CONFIG = {
-                "profile": "projects",
-                NAME_PROJECTS: None,
-                NAME_VIEW: None,
-            }
-            yaml.safe_dump(CONFIG, file)
-else:
-    CONFIG = yaml.safe_load(CONFIG)
+PROFILE_INFO_FILE = Path(os.environ["PROJECTS_CONFIG"] or Path.home()) / ".documents_cli.yaml"
+try:
+    with PROFILE_INFO_FILE.open() as file:
+        CONFIG = yaml.safe_load(file)
+except FileNotFoundError:
+    with PROFILE_INFO_FILE.open("w") as file:
+        CONFIG = {
+            "profile": "projects",
+            NAME_PROJECTS: None,
+            NAME_VIEW: None,
+        }
+        yaml.safe_dump(CONFIG, file)
+        raise ValueError(f"Must configure {NAME_PROJECTS} and {NAME_VIEW} in {PROFILE_INFO_FILE}")
 
 PROJECTS_ROOT = Path(CONFIG[NAME_PROJECTS])
 assert PROJECTS_ROOT
