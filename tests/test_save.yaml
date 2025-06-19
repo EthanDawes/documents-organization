@@ -4,14 +4,12 @@ start:
       project1.txt: null
     project2:
       project2.txt: null
-  DOCS_VIEW_ROOT: {}
+  DOCS_VIEW_ROOT:
+    demo:
+      project1.lnk: null
+      project2.lnk: null
 
-projects:
-  project1:
-    - demo
-  project2:
-    - demo
-    - really/really/deep
+projects: {}
 
 end:
   PROJECTS_ROOT:
@@ -24,7 +22,3 @@ end:
     demo:
       project1.lnk: null
       project2.lnk: null
-    really:
-      really:
-        deep:
-          project2.lnk: null
