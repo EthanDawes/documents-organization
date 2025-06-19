@@ -6,15 +6,38 @@ from abc import abstractmethod, ABC
 from json import JSONDecodeError
 from pathlib import Path
 from subprocess import run
+import yaml
 
 import winshell
 from InquirerPy import inquirer
 
-PROJECTS_ROOT = Path(os.environ['PROJECTS_ROOT'])
+# Get profile
+NAME_PROJECTS = "PROJECTS_ROOT"
+NAME_VIEW = "DOCS_VIEW_ROOT"
+
+CONFIG: dict | str | None = os.environ.get("PROJECTS_CONFIG")
+
+if CONFIG is None:
+    PROFILE_INFO_FILE = Path.home() / ".documents_cli.yaml"
+    try:
+        with PROFILE_INFO_FILE.open() as file:
+            CONFIG = yaml.safe_load(file)
+    except FileNotFoundError:
+        with PROFILE_INFO_FILE.open("w") as file:
+            CONFIG = {
+                "profile": "projects",
+                NAME_PROJECTS: None,
+                NAME_VIEW: None,
+            }
+            yaml.safe_dump(CONFIG, file)
+else:
+    CONFIG = yaml.safe_load(CONFIG)
+
+PROJECTS_ROOT = Path(CONFIG[NAME_PROJECTS])
 assert PROJECTS_ROOT
-DOCS_VIEW_ROOT = Path(os.environ['DOCS_VIEW_ROOT'])
+DOCS_VIEW_ROOT = Path(CONFIG[NAME_VIEW])
 assert DOCS_VIEW_ROOT
-PROJECTS_FILE = PROJECTS_ROOT / 'projects.json'
+PROJECTS_FILE = PROJECTS_ROOT / (CONFIG["profile"] + '.json')
 
 PathLike = str | bytes | os.PathLike
 ProjectsSpec = dict[str, list[str]]
@@ -36,11 +59,9 @@ class JunctionBackend(ViewBackend):
 class ShortcutBackend(ViewBackend):
     @staticmethod
     def mklink(src: Path, dst: Path) -> None:
-        rel_path = f"%PROJECTS_ROOT%\\{src.name}"
-        print(f"Creating shortcut from {rel_path} to {dst}")
+        print(f"Creating shortcut from %{NAME_PROJECTS}%\\{src.name} to {dst}")
         with winshell.shortcut(str(dst)) as shortcut:
-            shortcut.path = rel_path
-            shortcut.working_directory = "%PROJECTS_ROOT%"
+            shortcut.path = src
 
 
 implementation = ShortcutBackend()
@@ -51,9 +72,9 @@ def assert_valid_folder(path: Path):
     assert path.is_dir()
     error_msg = f"You cannot perform this operation on the %s folder ({path})"
     if path == PROJECTS_ROOT:
-        raise ValueError(error_msg % "PROJECTS_ROOT")
+        raise ValueError(error_msg % NAME_PROJECTS)
     elif path == DOCS_VIEW_ROOT:
-        raise ValueError(error_msg % "DOCS_VIEW_ROOT")
+        raise ValueError(error_msg % NAME_VIEW)
 
 
 def load_projects() -> ProjectsSpec:

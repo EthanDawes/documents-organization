@@ -9,6 +9,7 @@ dependencies = [
     "winshell>=0.6",
     "inquirerpy>=0.3.4",
     "pywin32>=310",
+    "pyyaml>=6.0.2",
 ]
 requires-python = ">=3.12"
 readme = "README.md"
@@ -17,9 +18,20 @@ license = {text = "MIT"}
 [project.scripts]
 projects = "project_cli:main"
 
-[tool.pdm]
-distribution = true
-
 [build-system]
 requires = ["pdm-backend"]
 build-backend = "pdm.backend"
+
+[dependency-groups]
+test = [
+    "pytest>=8.4.1",
+    "pyfakefs>=5.8.0",
+    "pytest-cov>=6.2.1",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.pdm]
+distribution = true
+
