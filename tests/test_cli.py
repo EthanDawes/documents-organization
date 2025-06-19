@@ -2,8 +2,7 @@ import json
 import os
 os.environ["PROJECTS_CONFIG"] = "tests/.projview_cli.yaml"
 
-from pyfakefs.fake_filesystem import FakeFilesystem
-from pyfakefs.fake_filesystem_unittest import Patcher
+# Silly me didn't realize I made calls dependent on the real system (mklink), thus pyfakefs won't work
 import yaml
 import projview_cli
 
@@ -40,7 +39,7 @@ def test_load():
         create_tree(fs, data["start"])
         fs.create_file(ROOT + "/PROJECTS_ROOT/projects.json", contents=json.dumps(data["projects"]))
 
-        projects_cli.cmd_load()
+        projview_cli.cmd_load()
 
         actual = read_tree(fs)
         assert actual == data["end"]
